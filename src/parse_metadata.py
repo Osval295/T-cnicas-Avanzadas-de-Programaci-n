@@ -63,16 +63,16 @@ def lector_fasta(file):
 # secuencias
 def secuencias(secuencias, guardar=True):
     fasta = secuencias.copy()
-    dict_data = {'idx': [], 'nombres': [], 
-                 'secuencias': [], 'cantidad_seq': [],
-                 'longitud_seq': []}
+    dict_data = {'idx': [], 'nombre_seq': [], 
+                'seq': [], 'cantidad_seq': [],
+                'longitud_seq': []}
     for en,ii in enumerate(fasta['fichero']):
-        nombres, secuencias = lector_fasta(ii)
-        ctdad = [len(seq) for seq in secuencias]
+        nombres_seq, seq = lector_fasta(ii)
+        ctdad = [len(seq) for seq in seq]
         dict_data['idx'].append(en)
-        dict_data['nombres'].append(nombres)
-        dict_data['secuencias'].append(secuencias)
-        dict_data['cantidad_seq'].append(len(secuencias))
+        dict_data['nombre_seq'].append(nombres_seq)
+        dict_data['seq'].append(seq)
+        dict_data['cantidad_seq'].append(len(seq))
         dict_data['longitud_seq'].append(ctdad)
     fasta = pd.merge(fasta,pd.DataFrame(dict_data), left_on=fasta.index,right_on='idx').drop(columns=['idx'])
     if guardar:
@@ -93,6 +93,8 @@ if __name__ == '__main__':
     # metadatos
     fasta_input = '../0. Proyecto/Data_forTAP/*.fna'
     meta = metadatos(fasta_input, df)
-    
+
     # secuencias
-    secuencias = secuencias(meta)
+    secuencias = secuencias(meta[['fichero']])
+
+# %%
